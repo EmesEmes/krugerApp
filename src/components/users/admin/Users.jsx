@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CreateUser from "./operations/createUser";
 import EditUser from "./operations/EditUser";
+import { Toast } from "primereact/toast";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [view, setView] = useState("list");
   const [userToEdit, setUserToEdit] = useState(null);
 
-  console.log(users)
+  const toast = useRef(null);
+
+  console.log(users);
   useEffect(() => {
-    // Cargar usuarios desde localStorage
+    // load users from localstorage
     if (localStorage.getItem("users") === null) {
       localStorage.setItem("users", JSON.stringify([]));
     } else {
@@ -23,23 +26,30 @@ const Users = () => {
   };
 
   const handleEditUser = (user) => {
-    setUserToEdit(user); // Establecer el usuario a editar
+    setUserToEdit(user); // Set the user to edit
     setView("edit");
   };
 
   const handleDeleteUser = (id) => {
     const updatedUsers = users.filter((user) => user.id !== id);
     localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUsers(updatedUsers); // Actualizar el estado de los usuarios
+    setUsers(updatedUsers); // Update user state
+    toast.current.show({
+      severity: "success",
+      summary: "Success",
+      detail: "User Deleted Successfully",
+      life: 3000,
+    });
   };
 
   const handleUserUpdated = (updatedUsers) => {
-    setUsers(updatedUsers); // Actualizar la lista de usuarios
-    setView("list"); // Volver a la vista de lista
+    setUsers(updatedUsers); 
+    setView("list"); 
   };
 
   return (
     <div className="flex flex-col gap-4">
+      <Toast ref={toast} />
       {view === "list" && (
         <>
           <button
@@ -67,15 +77,27 @@ const Users = () => {
                     No users available
                   </td>
                 </tr>
-              ):(
+              ) : (
                 users.map((user) => (
                   <tr key={user.id}>
-                    <td className="border-2 border-primary text-center">{user.id}</td>
-                    <td className="border-2 border-primary text-center">{user.coordinates[0]}</td>
-                    <td className="border-2 border-primary text-center">{user.coordinates[1]}</td>
-                    <td className="border-2 border-primary text-center">{user.names}</td>
-                    <td className="border-2 border-primary text-center">{user.lastnames}</td>
-                    <td className="border-2 border-primary text-center">{user.email}</td>
+                    <td className="border-2 border-primary text-center">
+                      {user.id}
+                    </td>
+                    <td className="border-2 border-primary text-center">
+                      {user.coordinates[0]}
+                    </td>
+                    <td className="border-2 border-primary text-center">
+                      {user.coordinates[1]}
+                    </td>
+                    <td className="border-2 border-primary text-center">
+                      {user.names}
+                    </td>
+                    <td className="border-2 border-primary text-center">
+                      {user.lastnames}
+                    </td>
+                    <td className="border-2 border-primary text-center">
+                      {user.email}
+                    </td>
                     <td className="flex gap-2 justify-center border-2 border-primary">
                       <button
                         className="border-2 border-primary rounded p-2 bg-primary text-white hover:bg-white hover:text-primary transition duration-300"
@@ -92,8 +114,7 @@ const Users = () => {
                     </td>
                   </tr>
                 ))
-              ) }
-                
+              )}
             </tbody>
           </table>
         </>

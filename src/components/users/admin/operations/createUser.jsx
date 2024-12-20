@@ -7,8 +7,8 @@ const CreateUser = ({ onBack, onUserCreated }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    // Validar la cédula antes de continuar
+
+
     const id = validateId(e.target["id"].value);
     if (!id) {
       toast.current.show({
@@ -17,18 +17,18 @@ const CreateUser = ({ onBack, onUserCreated }) => {
         detail: "Invalid ID",
         life: 3000,
       });
-      return; // Detener flujo si la cédula es inválida
+      return; 
     }
 
-     // Verificar si el ID ya existe
-     if (checkIfIdExists(id)) {
+    // Check if the ID already exists
+    if (checkIfIdExists(id)) {
       toast.current.show({
         severity: "error",
         summary: "Error",
         detail: "ID already exists",
         life: 3000,
       });
-      return; // Detener flujo si el ID ya existe
+      return; 
     }
 
     const email = e.target["email"].value.trim();
@@ -39,10 +39,9 @@ const CreateUser = ({ onBack, onUserCreated }) => {
         detail: "Invalid Email Format",
         life: 3000,
       });
-      return; // Detener flujo si el correo es inválido
+      return; 
     }
 
-    // Validar nombres y apellidos
     const names = e.target["names"].value.trim();
     const lastnames = e.target["lastanames"].value.trim();
     if (!validateText(names)) {
@@ -64,10 +63,9 @@ const CreateUser = ({ onBack, onUserCreated }) => {
       });
       return;
     }
-  
-    // Crear el objeto del usuario con datos válidos
+
     const dataUser = {
-      id, // cédula validada
+      id, 
       coordinates: [
         parseFloat(e.target["latitude"].value),
         parseFloat(e.target["longitude"].value),
@@ -78,8 +76,8 @@ const CreateUser = ({ onBack, onUserCreated }) => {
       user: names.toLowerCase().replace(/\s/g, "") + id,
       password: new Date().getTime().toString(),
     };
-  
-    // Agregar usuario a localStorage y notificar al padre
+
+    // Add user to localStorage and notify parent component
     onUserCreated(dataUser);
     toast.current.show({
       severity: "success",
@@ -87,36 +85,42 @@ const CreateUser = ({ onBack, onUserCreated }) => {
       detail: "User Created Successfully",
       life: 3000,
     });
-  
-    // Reiniciar el formulario
+
     form.current.reset();
   };
   const checkIfIdExists = (id) => {
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    return users.some(user => user.id === id);
+    return users.some((user) => user.id === id);
   };
-  
+
+
+  // validate that the id is correct
   const validateId = (id) => {
     const cedula = String(id);
-  
+
     if (cedula.length !== 10) {
-      return false; // La cédula debe tener 10 dígitos
+      return false; 
     }
-  
+
     const digito_region = parseInt(cedula.substring(0, 2), 10);
     if (digito_region < 1 || digito_region > 24) {
-      return false; // Región inválida
+      return false; 
     }
-  
-    const pares = parseInt(cedula[1]) + parseInt(cedula[3]) + parseInt(cedula[5]) + parseInt(cedula[7]);
+
+    const pares =
+      parseInt(cedula[1]) +
+      parseInt(cedula[3]) +
+      parseInt(cedula[5]) +
+      parseInt(cedula[7]);
     const impares = [0, 2, 4, 6, 8].reduce((sum, i) => {
       let val = parseInt(cedula[i]) * 2;
       return sum + (val > 9 ? val - 9 : val);
     }, 0);
-  
+
     const suma_total = pares + impares;
-    const digito_validador = (Math.ceil(suma_total / 10) * 10 - suma_total) % 10;
-  
+    const digito_validador =
+      (Math.ceil(suma_total / 10) * 10 - suma_total) % 10;
+
     return digito_validador === parseInt(cedula[9], 10) ? cedula : false;
   };
 
@@ -129,7 +133,6 @@ const CreateUser = ({ onBack, onUserCreated }) => {
     const textRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     return textRegex.test(text);
   };
-  
 
   return (
     <div className="flex flex-col gap-4 items-center">
@@ -140,15 +143,55 @@ const CreateUser = ({ onBack, onUserCreated }) => {
         onSubmit={handleSubmit}
         ref={form}
       >
-        <input type="number" name="id" placeholder="Id" className="p-2 border" required />
+        <input
+          type="number"
+          name="id"
+          placeholder="Id"
+          className="p-2 border"
+          required
+        />
         <div className="w-full flex gap-2">
-          <input type="text" name="latitude" placeholder="Latitude" className="p-2 border" required />
-          <input type="text" name="longitude" placeholder="Longitude" className="p-2 border" required />
+          <input
+            type="text"
+            name="latitude"
+            placeholder="Latitude"
+            className="p-2 border"
+            required
+          />
+          <input
+            type="text"
+            name="longitude"
+            placeholder="Longitude"
+            className="p-2 border"
+            required
+          />
         </div>
-        <input type="text" name="names" placeholder="Names" className="p-2 border" required />
-        <input type="text" name="lastanames" placeholder="Last Names" className="p-2 border" required />
-        <input type="text" name="email" placeholder="Email" className="p-2 border"  />
-        <button type="submit" className="bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300">Save User</button>
+        <input
+          type="text"
+          name="names"
+          placeholder="Names"
+          className="p-2 border"
+          required
+        />
+        <input
+          type="text"
+          name="lastanames"
+          placeholder="Last Names"
+          className="p-2 border"
+          required
+        />
+        <input
+          type="text"
+          name="email"
+          placeholder="Email"
+          className="p-2 border"
+        />
+        <button
+          type="submit"
+          className="bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300"
+        >
+          Save User
+        </button>
         <button
           type="button"
           onClick={onBack}
@@ -157,7 +200,6 @@ const CreateUser = ({ onBack, onUserCreated }) => {
           Back
         </button>
       </form>
-      {/* <button onClick={(() => validateId(1708781991))}>validar</button> */}
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const EditUser = ({ onBack, user, onUserUpdated }) => {
-  // Estado local para manejar los datos del usuario
   const [formData, setFormData] = useState({
     id: user.id,
     coordinates: [...user.coordinates],
@@ -12,12 +11,11 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
     password: user.password,
   });
 
-  // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "latitude" || name === "longitude") {
-      // Intentar convertir el valor a un número flotante
+      // Try to convert the value to a float number
       const updatedCoordinates = [...formData.coordinates];
       const index = name === "latitude" ? 0 : 1;
 
@@ -29,14 +27,13 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
     }
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateUserInLocalStorage(formData); // Actualizar el usuario en localStorage
-    onUserUpdated(formData); // Enviar los datos actualizados al componente padre
+    updateUserInLocalStorage(formData); // Update user in localStorage
+    onUserUpdated(formData); // Send updated data to parent component
   };
 
-  // Función para actualizar el usuario en localStorage
+  // Function to update user in localStorage
   const updateUserInLocalStorage = (updatedUser) => {
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const updatedUsers = users.map((user) =>
@@ -56,7 +53,7 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
           value={formData.id}
           onChange={handleChange}
           className="p-2 border"
-          disabled // Id no editable
+          disabled
         />
         <div className="flex gap-2">
           <input
@@ -105,7 +102,10 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
           className="p-2 border"
           required
         />
-        <button type="submit" className="mx-auto w-[100px] bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300">
+        <button
+          type="submit"
+          className="mx-auto w-[100px] bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300"
+        >
           Save
         </button>
         <button

@@ -9,14 +9,14 @@ const EditSector = ({ sector, onSectorUpdated, onBack }) => {
     if (name.startsWith("coord")) {
       const index = parseInt(name.split("-")[1], 10);
       const updatedCoords = [...formData.coords];
-      updatedCoords[index] = value.split(",").map(Number); // Convertir valores a números
+      updatedCoords[index] = value.split(",").map(Number);
       setFormData({ ...formData, coords: updatedCoords });
     } else if (["startTime", "endTime"].includes(name)) {
       setFormData({
         ...formData,
         powerOutageSchedule: {
           ...formData.powerOutageSchedule,
-          [name]: value, // Guardar horarios como cadenas
+          [name]: value,
         },
       });
     } else {
@@ -26,7 +26,7 @@ const EditSector = ({ sector, onSectorUpdated, onBack }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSectorUpdated(formData); // Enviar datos actualizados
+    onSectorUpdated(formData);
   };
 
   return (
@@ -69,7 +69,10 @@ const EditSector = ({ sector, onSectorUpdated, onBack }) => {
           className="p-2 border"
         />
         <div className="flex flex-col gap-2">
-          <button type="submit" className="mx-auto w-[100px] bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300">
+          <button
+            type="submit"
+            className="mx-auto w-[100px] bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300"
+          >
             Save
           </button>
           <button

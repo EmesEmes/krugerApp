@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MapComponent from "../../map/Map";
 import CreateSector from "./operations/CreateSector";
 import EditSector from "./operations/EditSector";
+import { Toast } from "primereact/toast";
 
 const Sectors = () => {
   const [sectors, setSectors] = useState([]);
   const [view, setView] = useState("list");
   const [sectorToEdit, setSectorToEdit] = useState(null);
 
+  const toast = useRef(null);
+
   useEffect(() => {
-    // Cargar sectores desde localStorage
     const storedSectors = localStorage.getItem("polygons");
     if (storedSectors) {
       setSectors(JSON.parse(storedSectors));
@@ -33,6 +35,12 @@ const Sectors = () => {
   const handleDeleteSector = (id) => {
     const updatedSectors = sectors.filter((sector) => sector.id !== id);
     saveSectorsToLocalStorage(updatedSectors);
+    toast.current.show({
+      severity: "success",
+      sumary: "Success",
+      detail: "Sector Deleted Successfully",
+      life: 3000,
+    });
   };
 
   const handleSectorCreated = (newSector) => {
@@ -51,6 +59,7 @@ const Sectors = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Toast ref={toast} />
       {view === "list" && (
         <>
           <button
@@ -75,8 +84,12 @@ const Sectors = () => {
               {Array.isArray(sectors) && sectors.length > 0 ? (
                 sectors.map((sector) => (
                   <tr key={sector.id}>
-                    <td className="border-2 border-primary text-center">{sector.id}</td>
-                    <td className="border-2 border-primary text-center">{sector.name}</td>
+                    <td className="border-2 border-primary text-center">
+                      {sector.id}
+                    </td>
+                    <td className="border-2 border-primary text-center">
+                      {sector.name}
+                    </td>
                     <td className="border-2 border-primary text-center">
                       {sector.coords.map((coord, index) => (
                         <span key={index}>

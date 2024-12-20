@@ -5,7 +5,7 @@ const CreateSector = ({ onBack, onSectorCreated }) => {
   const toast = useRef(null);
   const form = useRef(null);
   const [coordinates, setCoordinates] = useState([
-    { latitude: "", longitude: "" }, // Coordenada inicial
+    { latitude: "", longitude: "" }, 
   ]);
 
   const handleSubmit = (e) => {
@@ -14,17 +14,17 @@ const CreateSector = ({ onBack, onSectorCreated }) => {
     const dataSector = {
       id: new Date().getTime(),
       powerOutageSchedule: {
-        startTime: (e.target["startTime"].value),
-        endTime: (e.target["endTime"].value),
+        startTime: e.target["startTime"].value,
+        endTime: e.target["endTime"].value,
       },
-      coords: coordinates.map(coord => [
+      coords: coordinates.map((coord) => [
         parseFloat(coord.latitude),
         parseFloat(coord.longitude),
       ]),
       name: e.target["names"].value.trim(),
     };
 
-    // Agregar sector a localStorage y notificar al padre
+    
     onSectorCreated(dataSector);
     toast.current.show({
       severity: "success",
@@ -33,7 +33,7 @@ const CreateSector = ({ onBack, onSectorCreated }) => {
       life: 3000,
     });
     form.current.reset();
-    setCoordinates([{ latitude: "", longitude: "" }]); // Reiniciar coordenadas
+    setCoordinates([{ latitude: "", longitude: "" }]); 
   };
 
   const handleAddCoordinate = () => {

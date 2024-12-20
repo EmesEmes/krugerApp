@@ -14,9 +14,13 @@ const MapComponent = ({
 
     if (typeof startTime === "string" && typeof endTime === "string") {
       if (startTime <= endTime) {
-        return currentTime >= startTime && currentTime < endTime ? "red" : "green";
+        return currentTime >= startTime && currentTime < endTime
+          ? "red"
+          : "green";
       } else {
-        return currentTime >= startTime || currentTime < endTime ? "red" : "green";
+        return currentTime >= startTime || currentTime < endTime
+          ? "red"
+          : "green";
       }
     }
     return "green";
@@ -40,7 +44,11 @@ const MapComponent = ({
           return null;
         }
 
-        const { name = "Unknown", coords = [], powerOutageSchedule = {} } = sector;
+        const {
+          name = "Unknown",
+          coords = [],
+          powerOutageSchedule = {},
+        } = sector;
         const { startTime = "N/A", endTime = "N/A" } = powerOutageSchedule;
 
         return (
