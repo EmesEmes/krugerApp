@@ -16,7 +16,7 @@ const EditSector = ({ sector, onSectorUpdated, onBack }) => {
         ...formData,
         powerOutageSchedule: {
           ...formData.powerOutageSchedule,
-          [name]: parseInt(value, 10), // Convertir horarios a números
+          [name]: value, // Guardar horarios como cadenas
         },
       });
     } else {
@@ -53,26 +53,30 @@ const EditSector = ({ sector, onSectorUpdated, onBack }) => {
           />
         ))}
         <input
-          type="number"
+          type="time"
           name="startTime"
           value={formData.powerOutageSchedule.startTime}
           onChange={handleChange}
-          placeholder="Start Time (0-23)"
+          placeholder="Start Time"
           className="p-2 border"
         />
         <input
-          type="number"
+          type="time"
           name="endTime"
           value={formData.powerOutageSchedule.endTime}
           onChange={handleChange}
-          placeholder="End Time (0-23)"
+          placeholder="End Time"
           className="p-2 border"
         />
-        <div className="flex gap-2">
-          <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+        <div className="flex flex-col gap-2">
+          <button type="submit" className="mx-auto w-[100px] bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300">
             Save
           </button>
-          <button type="button" onClick={onBack} className="p-2 bg-gray-300 rounded">
+          <button
+            type="button"
+            onClick={onBack}
+            className="mx-auto w-[100px] p-2 border-2 border-primary text-primary hover:bg-primary hover:text-white transition duration-300 rounded-lg"
+          >
             Back
           </button>
         </div>

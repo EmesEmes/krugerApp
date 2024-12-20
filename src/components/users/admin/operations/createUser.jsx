@@ -20,6 +20,17 @@ const CreateUser = ({ onBack, onUserCreated }) => {
       return; // Detener flujo si la cédula es inválida
     }
 
+     // Verificar si el ID ya existe
+     if (checkIfIdExists(id)) {
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "ID already exists",
+        life: 3000,
+      });
+      return; // Detener flujo si el ID ya existe
+    }
+
     const email = e.target["email"].value.trim();
     if (!validateEmail(email)) {
       toast.current.show({
@@ -79,6 +90,10 @@ const CreateUser = ({ onBack, onUserCreated }) => {
   
     // Reiniciar el formulario
     form.current.reset();
+  };
+  const checkIfIdExists = (id) => {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    return users.some(user => user.id === id);
   };
   
   const validateId = (id) => {

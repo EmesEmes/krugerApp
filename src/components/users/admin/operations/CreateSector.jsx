@@ -14,8 +14,8 @@ const CreateSector = ({ onBack, onSectorCreated }) => {
     const dataSector = {
       id: new Date().getTime(),
       powerOutageSchedule: {
-        startTime: parseInt(e.target["startTime"].value),
-        endTime: parseInt(e.target["endTime"].value),
+        startTime: (e.target["startTime"].value),
+        endTime: (e.target["endTime"].value),
       },
       coords: coordinates.map(coord => [
         parseFloat(coord.latitude),
@@ -68,14 +68,14 @@ const CreateSector = ({ onBack, onSectorCreated }) => {
           required
         />
         <input
-          type="number"
+          type="time"
           name="startTime"
           placeholder="Start Time"
           className="p-2 border"
           required
         />
         <input
-          type="number"
+          type="time"
           name="endTime"
           placeholder="End Time"
           className="p-2 border"

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const EditUser = ({ onBack, user, onUserUpdated }) => {
-  console.log(user)
   // Estado local para manejar los datos del usuario
   const [formData, setFormData] = useState({
     id: user.id,
@@ -9,6 +8,8 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
     names: user.names,
     lastnames: user.lastnames,
     email: user.email,
+    user: user.user,
+    password: user.password,
   });
 
   // Manejar cambios en los campos del formulario
@@ -16,10 +17,12 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
     const { name, value } = e.target;
 
     if (name === "latitude" || name === "longitude") {
-      // Actualizar las coordenadas
+      // Intentar convertir el valor a un número flotante
       const updatedCoordinates = [...formData.coordinates];
       const index = name === "latitude" ? 0 : 1;
-      updatedCoordinates[index] = parseFloat(value) || 0; // Asegurarse de que sea un número
+
+      updatedCoordinates[index] = parseFloat(value);
+
       setFormData({ ...formData, coordinates: updatedCoordinates });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -29,7 +32,17 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
   // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
+    updateUserInLocalStorage(formData); // Actualizar el usuario en localStorage
     onUserUpdated(formData); // Enviar los datos actualizados al componente padre
+  };
+
+  // Función para actualizar el usuario en localStorage
+  const updateUserInLocalStorage = (updatedUser) => {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const updatedUsers = users.map((user) =>
+      user.id === updatedUser.id ? updatedUser : user
+    );
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
   };
 
   return (
@@ -47,20 +60,22 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
         />
         <div className="flex gap-2">
           <input
-            type="number"
+            type="text"
             name="latitude"
             placeholder="Latitude"
             value={formData.coordinates[0]}
             onChange={handleChange}
             className="p-2 border"
+            required
           />
           <input
-            type="number"
+            type="text"
             name="longitude"
             placeholder="Longitude"
             value={formData.coordinates[1]}
             onChange={handleChange}
             className="p-2 border"
+            required
           />
         </div>
         <input
@@ -70,6 +85,7 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
           value={formData.names}
           onChange={handleChange}
           className="p-2 border"
+          required
         />
         <input
           type="text"
@@ -78,6 +94,7 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
           value={formData.lastnames}
           onChange={handleChange}
           className="p-2 border"
+          required
         />
         <input
           type="email"
@@ -86,14 +103,15 @@ const EditUser = ({ onBack, user, onUserUpdated }) => {
           value={formData.email}
           onChange={handleChange}
           className="p-2 border"
+          required
         />
-        <button type="submit" className="p-2 bg-blue-500 text-white rounded">
-          Save User
+        <button type="submit" className="mx-auto w-[100px] bg-primary text-white border-2 border-primary p-2 rounded-lg hover:bg-white hover:text-primary transition duration-300">
+          Save
         </button>
         <button
           type="button"
           onClick={onBack}
-          className="p-2 bg-gray-300 text-black rounded"
+          className="mx-auto w-[100px] p-2 border-2 border-primary text-primary hover:bg-primary hover:text-white transition duration-300 rounded-lg"
         >
           Back
         </button>

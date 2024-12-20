@@ -8,11 +8,11 @@ const MapComponent = ({
   marker,
 }) => {
   const validatePowerOutage = (sector) => {
-    const currentTime = new Date().getHours();
+    const currentTime = new Date().toTimeString().slice(0, 5); // Get current time in HH:MM format
     const { powerOutageSchedule = {} } = sector;
     const { startTime, endTime } = powerOutageSchedule;
 
-    if (typeof startTime === "number" && typeof endTime === "number") {
+    if (typeof startTime === "string" && typeof endTime === "string") {
       if (startTime <= endTime) {
         return currentTime >= startTime && currentTime < endTime ? "red" : "green";
       } else {
@@ -51,7 +51,7 @@ const MapComponent = ({
           >
             <Popup>
               <p>Sector: {name}</p>
-              <p>{`From: ${startTime}:00 to ${endTime}:00`}</p>
+              <p>{`From: ${startTime} to ${endTime}`}</p>
               <p>
                 {validatePowerOutage(sector) === "green"
                   ? "Sector has Electricity"

@@ -68,7 +68,7 @@ const Users = () => {
                   </td>
                 </tr>
               ):(
-                users.map((user, index) => (
+                users.map((user) => (
                   <tr key={user.id}>
                     <td className="border-2 border-primary text-center">{user.id}</td>
                     <td className="border-2 border-primary text-center">{user.coordinates[0]}</td>
