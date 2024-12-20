@@ -7,35 +7,23 @@ const Default = () => <div><h2>Bienvenido</h2><p>Selecciona una opciÃ³n del menÃ
 
 const Admin = () => {
   const [activeComponent, setActiveComponent] = useState('users')
-  const [users, setUsers] = useState([]);
-  const [polygon, setPolygon] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    // Cargar usuarios desde localStorage
-    if (localStorage.getItem("users") === null) {
-      localStorage.setItem("users", JSON.stringify([]));
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
     } else {
-      const users = JSON.parse(localStorage.getItem("users"));
-      setUsers(users);
+      setCurrentUser(null);
     }
-  }, []);
-
-  useEffect(() => {
-    // Cargar usuarios desde localStorage
-    if (localStorage.getItem("polygons") === null) {
-      localStorage.setItem("polygons", JSON.stringify([]));
-    } else {
-      const polygons = JSON.parse(localStorage.getItem("polygons"));
-      setPolygon(polygons);
-    }
-  }, []);
+  }, [])
 
   const renderComponent = () => {
     switch (activeComponent) {
       case "users":
-        return <Users users={users} setUsers={setUsers}/>;
+        return <Users/>;
       case "sectors":
-        return <Sectors polygon={polygon} setPolygon={setPolygon}/>;
+        return <Sectors/>;
       default:
         return <Default />;
     }
@@ -43,7 +31,8 @@ const Admin = () => {
   return (
     <>
     <Header/>
-    <main className="flex">
+    {currentUser ? (
+      <main className="flex">
       
       <aside className="sticky top-0 h-dvh w-[200px] left-0 p-4 border-r-2 border-r-primary">
         <div className="flex flex-col p-6 gap-6">
@@ -54,15 +43,21 @@ const Admin = () => {
         <button 
           className="px-4 py-2 bg-primary text-white rounded border-2 border-primary hover:bg-white hover:text-primary transition duration-300" 
           onClick={() => setActiveComponent("sectors")}
-        >Sectores</button>
+        >Sectors</button>
         </div>
       </aside>
       <section className=" flex-1 p-4">
         {renderComponent()}
       </section>
     </main>
+    ): (
+      <div className="flex justify-center items-center h-screen">
+        <h2>Please <span className="text-primary">log in.</span></h2>
+      </div>
+    )}
     </>
   )
 }
 
 export default Admin
+

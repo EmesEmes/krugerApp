@@ -7,6 +7,7 @@ import Login from './components/login/Login.jsx'
 import { PrimeReactProvider } from 'primereact/api'
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css'
 import Admin from './components/users/admin/Admin.jsx'
+import Home from './components/users/user/Home.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/" element={<App />} />
           <Route path='/login' element={<Login />} />
           <Route path='/admin' element={<Admin />} />
+          <Route path='/user' element={<Home />} />
         </Routes>
       </BrowserRouter>
     </PrimeReactProvider>
