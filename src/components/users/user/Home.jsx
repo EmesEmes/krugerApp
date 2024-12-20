@@ -23,7 +23,6 @@ const Home = () => {
   }, []);
 
   const marker = currentUser.coordinates
-  console.log(marker)
 
   return (
     <div>
@@ -35,10 +34,10 @@ const Home = () => {
         marker={marker}
       />
       <div className="flex justify-center items-center mt-10">
-        {currentUser ? (
+        {Object.keys(currentUser).length > 0  ? (
           <h2>Welcome, <span className="text-primary">{currentUser.names}!</span></h2>
         ) : (
-          <h2>Por favor, inicie sesión.</h2>
+          <h2>Please, <span className="text-primary">Log In</span></h2>
         )}
       </div>
     </div>

@@ -17,7 +17,7 @@ const Sectors = () => {
   }, []);
 
   const saveSectorsToLocalStorage = (updatedSectors) => {
-    localStorage.setItem("polygons", JSON.stringify(updatedSectors));
+    localStorage.setItem("sectors", JSON.stringify(updatedSectors));
     setSectors(updatedSectors);
   };
 
@@ -48,7 +48,7 @@ const Sectors = () => {
     saveSectorsToLocalStorage(updatedSectors);
     setView("list");
   };
-
+console.log(sectors)
   return (
     <div className="flex flex-col gap-4">
       {view === "list" && (
@@ -78,10 +78,10 @@ const Sectors = () => {
                     <td className="border-2 border-primary text-center">{sector.id}</td>
                     <td className="border-2 border-primary text-center">{sector.name}</td>
                     <td className="border-2 border-primary text-center">
-                      {sector.coords.map((coord, index) => (
+                      {sectors.coordinates.map((coord, index) => (
                         <span key={index}>
                           [{coord[0]}, {coord[1]}]
-                          {index < sector.coords.length - 1 ? ", " : ""}
+                          {index < sector.coordinates.length - 1 ? ", " : ""}
                         </span>
                       ))}
                     </td>
